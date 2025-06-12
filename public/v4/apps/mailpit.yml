@@ -1,0 +1,59 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        environment:
+            MP_DATABASE: /data/mailpit.db
+            MP_MAX_MESSAGES: $$cap_max_messages
+            MP_SMTP_AUTH_ACCEPT_ANY: $$cap_smtp_auth_accept_any
+            MP_SMTP_AUTH_ALLOW_INSECURE: $$cap_smtp_auth_allow_insecure
+            TZ: $$cap_timezone
+        image: axllent/mailpit:$$cap_version
+        restart: always
+        volumes:
+            - $$cap_appname-data:/data
+        caproverExtra:
+            containerHttpPort: '8025'
+caproverOneClickApp:
+    variables:
+        - label: Mailpit Version
+          defaultValue: v1.26.0
+          description: 'Check out their Docker page for valid tags: https://hub.docker.com/r/axllent/mailpit/tags'
+          id: $$cap_version
+        - label: SMTP Port
+          description: Port for SMTP server
+          defaultValue: '1025'
+          id: $$cap_smtp_port
+        - label: Max Messages
+          description: Maximum number of messages to store
+          defaultValue: '5000'
+          id: $$cap_max_messages
+        - label: SMTP Auth Accept Any
+          description: Accept any username/password for SMTP authentication (1 = yes, 0 = no)
+          defaultValue: '1'
+          id: $$cap_smtp_auth_accept_any
+        - label: SMTP Auth Allow Insecure
+          description: Allow insecure SMTP authentication (1 = yes, 0 = no)
+          defaultValue: '1'
+          id: $$cap_smtp_auth_allow_insecure
+        - label: Timezone
+          description: Timezone for the application (e.g., UTC, Europe/London, America/New_York)
+          defaultValue: 'UTC'
+          id: $$cap_timezone
+    instructions:
+        start: >-
+            Mailpit is a small, fast, low memory, zero-dependency, multi-platform email testing tool & API for developers.
+
+            It acts as an SMTP server, provides a modern web interface to view & test captured emails, and includes an API for automated integration testing.
+
+            Enter your Mailpit configuration parameters and click on next. It will take about a minute for the process to finish.
+        end: >-
+            Mailpit has been successfully deployed! 
+
+            - Web UI is accessible through your CapRover app URL
+            - SMTP server is available at srv-captain--$$cap_appname:1025 for other CapRover apps
+
+            Configure your applications to send emails to this SMTP server for testing.
+    displayName: Mailpit
+    isOfficial: false
+    description: A small, fast, low memory, zero-dependency, multi-platform email testing tool & API for developers
+    documentation: https://mailpit.axllent.org/docs/
